@@ -409,7 +409,7 @@ export default function App() {
                   <motion.button
                     whileHover={{ scale: 1.03 }}
                     whileTap={{ scale: 0.98 }}
-                    onClick={() => window.location.href = 'https://pay.hotmart.com/D105724335A?off=z7t9p2n3'}
+                    onClick={() => window.location.href = 'https://pay.hotmart.com/D105724335A?off=z7t9p2n3&checkoutMode=10'}
                     className="w-full bg-gradient-to-r from-primary-green to-yellow-500 text-white font-display font-black py-4 rounded-full text-sm uppercase tracking-widest shadow-lg mb-3"
                   >
                     ¡COMPRAR AHORA!
@@ -458,7 +458,7 @@ export default function App() {
                   <motion.button
                     whileHover={{ scale: 1.03 }}
                     whileTap={{ scale: 0.98 }}
-                    onClick={() => window.location.href = 'https://pay.hotmart.com/D105724335A?off=5u1btmc4'}
+                    onClick={() => window.location.href = 'https://pay.hotmart.com/D105724335A?off=5u1btmc4&checkoutMode=10'}
                     className="w-full bg-gradient-to-r from-primary-green to-yellow-500 text-white font-display font-black py-4 rounded-full text-sm uppercase tracking-widest shadow-lg mb-3"
                   >
                     ¡COMPRAR AHORA!
