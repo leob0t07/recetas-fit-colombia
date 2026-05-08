@@ -25,7 +25,79 @@ import {
 
 // --- Components ---
 
-const Button: React.FC<{ children: ReactNode, className?: string, primary?: boolean, onClick?: () => void }> = ({ children, className = "", primary = true, onClick }) => (
+const PurchaseNotification = () => {
+  const [currentIdx, setCurrentIdx] = useState(0);
+  const [visible, setVisible] = useState(false);
+
+  const notifications = [
+    { initial: "V", name: "Valentina M.", city: "Medellín", time: "Hace 2 minutos", message: "acaba de comprar +275 Recetas Fitness 🎉" },
+    { initial: "J", name: "Juan D.", city: "Bogotá", time: "Hace 5 minutos", message: "acaba de comprar +275 Recetas Fitness 🎉" },
+    { initial: "M", name: "María P.", city: "Cali", time: "Hace 8 minutos", message: "acaba de comprar +275 Recetas Fitness 🎉" },
+    { initial: "S", name: "Santiago R.", city: "Barranquilla", time: "Hace 10 minutos", message: "acaba de comprar +275 Recetas Fitness 🎉" },
+    { initial: "C", name: "Camila G.", city: "Cartagena", time: "Hace 12 minutos", message: "acaba de comprar +275 Recetas Fitness 🎉" },
+    { initial: "A", name: "Andrés F.", city: "Bucaramanga", time: "Hace 14 minutos", message: "acaba de comprar +275 Recetas Fitness 🎉" },
+    { initial: "L", name: "Laura S.", city: "Medellín", time: "Hace 15 minutos", message: "acaba de comprar +275 Recetas Fitness 🎉" },
+    { initial: "D", name: "Diego M.", city: "Bogotá", time: "Hace 16 minutos", message: "acaba de comprar +275 Recetas Fitness 🎉" },
+    { initial: "P", name: "Paula B.", city: "Cali", time: "Hace 17 minutos", message: "acaba de comprar +275 Recetas Fitness 🎉" },
+    { initial: "K", name: "Kevin J.", city: "Barranquilla", time: "Hace 18 minutos", message: "acaba de comprar +275 Recetas Fitness 🎉" }
+  ];
+
+  useEffect(() => {
+    let timeoutId: ReturnType<typeof setTimeout>;
+
+    const showNext = () => {
+      setVisible(true);
+      
+      // Stay visible for 5 seconds
+      timeoutId = setTimeout(() => {
+        setVisible(false);
+        
+        // Wait 8-12 seconds before sharing next
+        const nextDelay = Math.floor(Math.random() * (12000 - 8000 + 1)) + 8000;
+        timeoutId = setTimeout(() => {
+          setCurrentIdx((prev) => (prev + 1) % notifications.length);
+          showNext();
+        }, nextDelay);
+      }, 5000);
+    };
+
+    // Initial delay
+    timeoutId = setTimeout(showNext, 5000);
+
+    return () => clearTimeout(timeoutId);
+  }, [notifications.length]);
+
+  const n = notifications[currentIdx];
+
+  return (
+    <AnimatePresence>
+      {visible && (
+        <motion.div
+          initial={{ x: -100, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          exit={{ x: -100, opacity: 0 }}
+          className="fixed bottom-4 left-4 z-50 bg-white rounded-xl shadow-2xl border-l-4 border-primary-green p-3 flex items-center gap-3 max-w-[280px] pointer-events-none"
+        >
+          <div className="w-12 h-12 bg-primary-green rounded-full flex items-center justify-center shrink-0 text-white font-black text-xl">
+            {n.initial}
+          </div>
+          <div className="flex flex-col">
+            <h5 className="font-display font-bold text-sm text-[#1A1A1A] leading-tight">{n.name}</h5>
+            <p className="text-[11px] text-[#555] leading-tight mt-0.5">{n.message}</p>
+            <p className="text-[10px] text-primary-green font-bold mt-1 uppercase tracking-tight">
+              {n.time} · {n.city}
+            </p>
+          </div>
+          <div className="absolute top-2 right-2 flex gap-0.5">
+            <div className="w-1.5 h-1.5 bg-primary-green/30 rounded-full animate-pulse" />
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+};
+
+const Button: React.FC<{ children: ReactNode, className?: string, primary?: boolean, onClick?: () => void, showIcon?: boolean }> = ({ children, className = "", primary = true, onClick, showIcon = true }) => (
   <motion.button
     whileHover={{ scale: 1.03, boxShadow: "0 10px 15px -3px rgba(45, 134, 83, 0.3)" }}
     whileTap={{ scale: 0.98 }}
@@ -36,7 +108,7 @@ const Button: React.FC<{ children: ReactNode, className?: string, primary?: bool
         : "bg-white text-primary-green border-2 border-primary-green hover:bg-bg-secondary"
     } ${className}`}
   >
-    <ArrowRight size={20} />
+    {showIcon && <ArrowRight size={20} />}
     {children}
   </motion.button>
 );
@@ -81,6 +153,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen">
+      <PurchaseNotification />
       
       {/* SECCIÓN 1: BARRA DE URGÊNCIA (SIN TIMER) */}
       <div className="fixed top-0 left-0 w-full bg-accent-orange text-white py-2 z-50 shadow-md text-center">
@@ -92,54 +165,69 @@ export default function App() {
       <main className="pt-[40px]">
         
         {/* SECCIÓN 2: HERO */}
-        <Section className="text-center">
-          <div className="flex flex-col gap-8 items-center">
-            {/* Headline y Sub ocupando todo el ancho arriba */}
-            <div className="w-full flex flex-col gap-4">
-              <h1 className="text-4xl md:text-5xl font-black leading-tight">
+        <Section className="text-center pt-8 pb-12">
+          <div className="max-w-[480px] mx-auto flex flex-col items-center">
+            
+            {/* 1. TÍTULO PRINCIPAL */}
+            <h1 className="font-display font-[900] text-[32px] text-[#1A1A1A] leading-[1.15] mb-4">
+              No escapes más de la dieta y de una vida <span className="text-primary-green">saludable</span>
+            </h1>
+
+            {/* 2. SUBHEADLINE */}
+            <div className="mb-6">
+              <h2 className="font-display font-[800] text-[22px] leading-tight">
                 +275 Recetas <span className="text-primary-green">Fitness</span>
-              </h1>
-              <p className="text-lg md:text-xl font-bold text-gray-700">
+              </h2>
+              <p className="font-display font-[700] text-[16px] text-[#555] mt-1">
                 Prácticas y Económicas
               </p>
-              <p className="text-gray-600 italic">
+            </div>
+
+            {/* 3. IMAGEM DA CAPA */}
+            <div className="w-full aspect-[4/3] rounded-[14px] overflow-hidden shadow-2xl mb-6 bg-border-soft">
+              <img 
+                src="/ebook_mockup.png" 
+                alt="+275 Recetas Fitness Mockup" 
+                className="w-full h-full object-cover"
+                referrerPolicy="no-referrer"
+                onError={(e) => {
+                  e.currentTarget.src = "https://images.unsplash.com/photo-1594882645126-14020914d58d?w=800&q=80";
+                }}
+              />
+            </div>
+
+            {/* 4. PROVA SOCIAL */}
+            <div className="mb-8">
+              <div className="flex items-center justify-center gap-2 mb-1">
+                <div className="flex text-accent-orange">
+                  {[...Array(5)].map((_, i) => <Star key={i} size={20} fill="currentColor" />)}
+                </div>
+                <span className="font-display font-bold text-[14px]">+1.200 personas ya lo tienen</span>
+              </div>
+              <p className="font-sans italic text-[16px] text-[#555] leading-snug">
                 Come rico, come sano y ahorra plata — sin complicaciones
               </p>
-              <div className="flex items-center justify-center gap-1 text-accent-orange">
-                {[...Array(5)].map((_, i) => <Star key={i} size={16} fill="currentColor" />)}
-                <span className="text-xs md:text-sm text-gray-500 ml-2 font-bold">+1.200 personas ya lo tienen</span>
-              </div>
             </div>
 
-            {/* Imagem do Ebook centralizada */}
-            <div className="w-full max-w-[500px] mx-auto">
-              <div className="rounded-2xl overflow-hidden shadow-2xl border-4 border-white relative group bg-border-soft">
-                <img 
-                  src="/ebook_mockup.png" 
-                  alt="+275 Recetas Fitness Mockup" 
-                  className="w-full h-auto block"
-                  referrerPolicy="no-referrer"
-                  onError={(e) => {
-                    // Fallback if the image is not found
-                    e.currentTarget.src = "https://images.unsplash.com/photo-1594882645126-14020914d58d?w=800&q=80";
-                  }}
-                />
-                <div className="absolute inset-0 bg-primary-green/10 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
-              </div>
-            </div>
-
-            {/* Botão de ação principal */}
+            {/* 5. BOTÃO CTA */}
             <div className="w-full">
               <Button 
-                className="mt-2"
                 onClick={() => document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' })}
+                showIcon={false}
+                className="py-5 px-4 text-xl"
               >
-                Quiero mis recetas ahora
+                👉 QUIERO MIS RECETAS AHORA
               </Button>
-              <p className="mt-3 text-[10px] md:text-xs text-gray-400 flex items-center justify-center gap-1">
-                <Lock size={12} /> Compra 100% segura · Acceso inmediato · Garantía 7 días
-              </p>
             </div>
+
+            {/* 6. MICROCOPY */}
+            <p className="mt-4 text-[12px] text-gray-500 flex items-center justify-center gap-2">
+              <span>🔒 Compra 100% segura</span>
+              <span>·</span>
+              <span>Acceso inmediato</span>
+              <span>·</span>
+              <span>Garantía 7 días</span>
+            </p>
           </div>
         </Section>
 
@@ -204,46 +292,46 @@ export default function App() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
               { 
-                name: "Arepas Proteicas con Huevo", 
-                time: "15 min", 
-                img: "https://images.unsplash.com/photo-1551782450-a2132b4ba21d?w=400&q=80",
-                kcal: "320 kcal",
-                prot: "22g prot"
-              },
-              { 
-                name: "Ensalada de Pollo con Aguacate", 
+                name: "Pollo al Limón con Arroz Integral", 
                 time: "20 min", 
-                img: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400&q=80",
-                kcal: "380 kcal",
-                prot: "34g prot"
+                img: "https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?w=400&q=80",
+                kcal: "420 kcal",
+                prot: "41g prot"
               },
               { 
-                name: "Bowl de Atún con Quinua", 
-                time: "25 min", 
-                img: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&q=80",
-                kcal: "410 kcal",
-                prot: "38g prot"
-              },
-              { 
-                name: "Tortilla Fitness de Avena", 
+                name: "Pancakes Proteicos de Banana", 
                 time: "10 min", 
-                img: "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=400&q=80",
-                kcal: "290 kcal",
-                prot: "18g prot"
+                img: "https://images.unsplash.com/photo-1528207776546-365bb710ee93?w=400&q=80",
+                kcal: "310 kcal",
+                prot: "24g prot"
               },
               { 
-                name: "Sopa de Lentejas con Pollo", 
-                time: "30 min", 
-                img: "https://images.unsplash.com/photo-1547592180-85f173990554?w=400&q=80",
-                kcal: "360 kcal",
-                prot: "31g prot"
+                name: "Brochetas de Res con Vegetales", 
+                time: "25 min", 
+                img: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=400&q=80",
+                kcal: "390 kcal",
+                prot: "36g prot"
               },
               { 
-                name: "Wraps de Lechuga con Carne Magra", 
-                time: "20 min", 
-                img: "https://images.unsplash.com/photo-1529042410759-befb1204b468?w=400&q=80",
+                name: "Tostadas Fit con Aguacate y Huevo", 
+                time: "15 min", 
+                img: "https://images.unsplash.com/photo-1525351484163-7529414344d8?w=400&q=80",
                 kcal: "340 kcal",
-                prot: "29g prot"
+                prot: "19g prot"
+              },
+              { 
+                name: "Pasta de Lentejas con Salsa Roja", 
+                time: "30 min", 
+                img: "https://images.unsplash.com/photo-1473093226795-af9932fe5856?w=400&q=80",
+                kcal: "450 kcal",
+                prot: "28g prot"
+              },
+              { 
+                name: "Bowl Tropical de Frutas y Granola", 
+                time: "15 min", 
+                img: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&q=80",
+                kcal: "280 kcal",
+                prot: "12g prot"
               }
             ].map((recipe, idx) => (
               <div key={idx} className="bg-white p-3 rounded-2xl border border-border-soft shadow-sm flex flex-col">
@@ -409,7 +497,7 @@ export default function App() {
                   <motion.button
                     whileHover={{ scale: 1.03 }}
                     whileTap={{ scale: 0.98 }}
-                    onClick={() => window.location.href = 'https://pay.hotmart.com/D105724335A?off=z7t9p2n3&checkoutMode=10'}
+                    onClick={() => window.location.href = 'https://pay.hotmart.com/D105724335A?off=z7t9p2n3'}
                     className="w-full bg-gradient-to-r from-primary-green to-yellow-500 text-white font-display font-black py-4 rounded-full text-sm uppercase tracking-widest shadow-lg mb-3"
                   >
                     ¡COMPRAR AHORA!
@@ -458,7 +546,7 @@ export default function App() {
                   <motion.button
                     whileHover={{ scale: 1.03 }}
                     whileTap={{ scale: 0.98 }}
-                    onClick={() => window.location.href = 'https://pay.hotmart.com/D105724335A?off=5u1btmc4&checkoutMode=10'}
+                    onClick={() => window.location.href = 'https://pay.hotmart.com/D105724335A?off=5u1btmc4'}
                     className="w-full bg-gradient-to-r from-primary-green to-yellow-500 text-white font-display font-black py-4 rounded-full text-sm uppercase tracking-widest shadow-lg mb-3"
                   >
                     ¡COMPRAR AHORA!
@@ -590,9 +678,7 @@ export default function App() {
             <a href="#" className="hover:text-white transition-colors">Términos de Uso</a>
             <a href="#" className="hover:text-white transition-colors">Soporte</a>
           </div>
-          <div className="pt-4 border-t border-white/10">
-            <p className="text-xs font-black uppercase tracking-[3px] opacity-20">Powered by Hotmart</p>
-          </div>
+
         </div>
       </footer>
 
