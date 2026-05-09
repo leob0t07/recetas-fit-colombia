@@ -292,46 +292,46 @@ export default function App() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
               { 
-                name: "Pollo al Limón con Arroz Integral", 
-                time: "20 min", 
-                img: "https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?w=400&q=80",
-                kcal: "420 kcal",
-                prot: "41g prot"
+                name: "Lasaña Fitness de Pollo y Espinaca", 
+                time: "35 min", 
+                img: "/Recetas fitness img/Lasagna_slice_lifted_from_dish_202605082329.jpeg",
+                kcal: "430 kcal",
+                prot: "39g prot"
               },
               { 
-                name: "Pancakes Proteicos de Banana", 
-                time: "10 min", 
-                img: "https://images.unsplash.com/photo-1528207776546-365bb710ee93?w=400&q=80",
-                kcal: "310 kcal",
-                prot: "24g prot"
-              },
-              { 
-                name: "Brochetas de Res con Vegetales", 
-                time: "25 min", 
-                img: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=400&q=80",
-                kcal: "390 kcal",
-                prot: "36g prot"
-              },
-              { 
-                name: "Tostadas Fit con Aguacate y Huevo", 
-                time: "15 min", 
-                img: "https://images.unsplash.com/photo-1525351484163-7529414344d8?w=400&q=80",
-                kcal: "340 kcal",
-                prot: "19g prot"
-              },
-              { 
-                name: "Pasta de Lentejas con Salsa Roja", 
+                name: "Pizza Fit de Pollo con Masa Integral", 
                 time: "30 min", 
-                img: "https://images.unsplash.com/photo-1473093226795-af9932fe5856?w=400&q=80",
-                kcal: "450 kcal",
-                prot: "28g prot"
+                img: "/Recetas fitness img/Fitness_pizza_on_wooden_board_202605082329.jpeg",
+                kcal: "460 kcal",
+                prot: "42g prot"
               },
               { 
-                name: "Bowl Tropical de Frutas y Granola", 
-                time: "15 min", 
-                img: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&q=80",
-                kcal: "280 kcal",
-                prot: "12g prot"
+                name: "Pollo Crocante \"Frito\" al Horno", 
+                time: "25 min", 
+                img: "/Recetas fitness img/Crispy_chicken_pieces_on_parchment_202605082329.jpeg",
+                kcal: "380 kcal",
+                prot: "44g prot"
+              },
+              { 
+                name: "Bandeja Paisa Fitness", 
+                time: "40 min", 
+                img: "/Recetas fitness img/Bandeja_paisa_fitness_plate_202605082330.jpeg",
+                kcal: "490 kcal",
+                prot: "46g prot"
+              },
+              { 
+                name: "Tacos Fitness de Carne y Aguacate", 
+                time: "20 min", 
+                img: "/Recetas fitness img/Three_rustic_corn_tacos_202605082330.jpeg",
+                kcal: "410 kcal",
+                prot: "35g prot"
+              },
+              { 
+                name: "Burger Fit de Res con Pan Integral", 
+                time: "20 min", 
+                img: "/Recetas fitness img/Fitness_burger_on_slate_board_202605082331.jpeg",
+                kcal: "440 kcal",
+                prot: "40g prot"
               }
             ].map((recipe, idx) => (
               <div key={idx} className="bg-white p-3 rounded-2xl border border-border-soft shadow-sm flex flex-col">
