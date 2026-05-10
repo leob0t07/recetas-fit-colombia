@@ -167,7 +167,7 @@ export default function App() {
     year: 'numeric'
   });
 
-  const totalSteps = 11;
+  const totalSteps = 12;
 
   const nextStep = () => {
     setHistory([...history, funnelStep]);
@@ -184,12 +184,12 @@ export default function App() {
 
   // Loading animation logic
   useEffect(() => {
-    if (funnelStep === 9) { // Loading step
+    if (funnelStep === 10) { // Loading step
       const interval = setInterval(() => {
         setLoadingProgress((prev) => {
           if (prev >= 100) {
             clearInterval(interval);
-            setTimeout(() => setFunnelStep(10), 500); // Go to offer transition
+            setTimeout(() => setFunnelStep(11), 500); // Go to offer transition
             return 100;
           }
           return prev + 2;
@@ -217,6 +217,15 @@ export default function App() {
   const currentTransition = transitionData[goal as keyof typeof transitionData] || transitionData['comer más sano'];
 
   const quizQuestions = [
+    {
+      title: "¿Alguna vez intentaste comer más sano y lo dejaste antes de la primera semana?",
+      sub: "Sé honesto — esto es entre vos y tu plan",
+      layout: "grid",
+      options: [
+        { text: "Sí, me pasa sempre", emoji: "😅" },
+        { text: "No, pero quiero empezar", emoji: "💪" }
+      ]
+    },
     {
       title: "¿Cuál es tu objetivo principal?",
       sub: "Esto nos ayuda a seleccionar las recetas perfectas para vos",
@@ -247,7 +256,7 @@ export default function App() {
         { text: "Solo quiero mantenerme y comer mejor", emoji: "⚖️" }
       ]
     },
-    // Step 3 is Name Input
+    // Step 4 is Name Input
     {
       title: "¿Cuántas veces cocinás por semana?",
       sub: "Para mostrarte recetas que se adapten a tu ritmo de vida",
@@ -258,7 +267,7 @@ export default function App() {
         { text: "Todos los días sin falta", emoji: "🔥" }
       ]
     },
-    // Step 5 is Motivation
+    // Step 6 is Motivation
     {
       title: "¿De qué comida no abrís mano?",
       sub: "No te vamos a pedir que abandones lo que te gusta — prometido",
@@ -270,7 +279,7 @@ export default function App() {
       ]
     },
     {
-      title: "¿Cuánto tiempo tenés para cocinar al día?",
+      title: "¿Cuánto tiempo tenés para cocinar al dia?",
       sub: "Vamos a mostrarte recetas que entren perfecto en tu día",
       options: [
         { text: "Menos de 15 minutos", emoji: "⚡" },
@@ -289,11 +298,13 @@ export default function App() {
     }
   ];
 
-  if (funnelStep < 11) {
+  if (funnelStep < 12) {
     return (
       <div className="min-h-screen bg-bg-secondary flex flex-col items-center justify-center p-4 py-8">
         <style>
           {`
+            @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@900&family=Nunito:wght@400;600;700&display=swap');
+            
             @keyframes pulse-soft {
               0%, 100% { transform: scale(1); opacity: 1; }
               50% { transform: scale(1.05); opacity: 0.8; }
@@ -301,11 +312,13 @@ export default function App() {
             .animate-pulse-soft {
               animation: pulse-soft 2s ease-in-out infinite;
             }
+            .font-montserrat { font-family: 'Montserrat', sans-serif; }
+            .font-nunito { font-family: 'Nunito', sans-serif; }
           `}
         </style>
 
         {/* Progress Bar (Not for Loading or Transitions) */}
-        {funnelStep < 9 && (
+        {funnelStep < 10 && (
           <div className="w-full max-w-[480px] mb-8">
             <div className="flex justify-between items-center mb-2">
               <button 
@@ -330,41 +343,42 @@ export default function App() {
 
         {/* Funnel Card */}
         <AnimatePresence mode="wait">
-          {/* Questions 1-3 */}
-          {funnelStep <= 2 && (
+          {/* Questions 1-4 */}
+          {funnelStep <= 3 && (
             <motion.div
-              key="q1-3"
+              key={`q${funnelStep}`}
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: -20, opacity: 0 }}
               className="w-full max-w-[480px] bg-white rounded-3xl p-6 md:p-8 shadow-xl"
             >
-              <h2 className="font-display font-[900] text-2xl text-[#1A1A1A] leading-tight text-center mb-2">
+              <h2 className={`${funnelStep === 0 ? 'font-montserrat font-[900] text-2xl' : 'font-display font-[900] text-2xl'} text-[#1A1A1A] leading-tight text-center mb-2`}>
                 {quizQuestions[funnelStep].title}
               </h2>
-              <p className="text-gray-500 text-sm text-center mb-8 font-medium">
+              <p className={`text-gray-500 text-sm text-center mb-8 font-medium ${funnelStep === 0 ? 'font-nunito' : ''}`}>
                 {quizQuestions[funnelStep].sub}
               </p>
-              <div className="flex flex-col gap-3">
+              
+              <div className={`${quizQuestions[funnelStep].layout === 'grid' ? 'grid grid-cols-2 gap-4' : 'flex flex-col gap-3'}`}>
                 {quizQuestions[funnelStep].options.map((opt, idx) => (
                   <button
                     key={idx}
                     onClick={() => {
-                      if (funnelStep === 0) setGoal(opt.value || opt.text.toLowerCase());
+                      if (funnelStep === 1) setGoal(opt.value || opt.text.toLowerCase());
                       nextStep();
                     }}
-                    className="w-full p-4 rounded-xl border-2 border-border-soft hover:border-primary-green hover:bg-green-50 transition-all text-left flex items-center gap-4 group"
+                    className={`w-full p-4 rounded-xl border-2 border-border-soft hover:border-primary-green hover:bg-[#E8F5EE] transition-all flex flex-col items-center justify-center gap-4 group text-center ${quizQuestions[funnelStep].layout === 'grid' ? 'aspect-square' : 'flex-row text-left justify-start'}`}
                   >
-                    <span className="text-2xl group-hover:scale-125 transition-transform">{opt.emoji}</span>
-                    <span className="font-bold text-[#444] group-hover:text-primary-green transition-colors">{opt.text}</span>
+                    <span className={`${quizQuestions[funnelStep].layout === 'grid' ? 'text-4xl' : 'text-2xl'} group-hover:scale-125 transition-transform`}>{opt.emoji}</span>
+                    <span className={`font-bold text-[#444] group-hover:text-primary-green transition-colors leading-tight ${quizQuestions[funnelStep].layout === 'grid' ? 'text-[14px]' : 'text-base'}`}>{opt.text}</span>
                   </button>
                 ))}
               </div>
             </motion.div>
           )}
 
-          {/* Name Input Step (Step 3) */}
-          {funnelStep === 3 && (
+          {/* Name Input Step (Step 4) */}
+          {funnelStep === 4 && (
             <motion.div
               key="name_input"
               initial={{ y: 20, opacity: 0 }}
@@ -408,23 +422,23 @@ export default function App() {
             </motion.div>
           )}
 
-          {/* Question 4 (Step 4) */}
-          {funnelStep === 4 && (
+          {/* Question 5 (Step 5) */}
+          {funnelStep === 5 && (
             <motion.div
-              key="q4"
+              key="q5"
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: -20, opacity: 0 }}
               className="w-full max-w-[480px] bg-white rounded-3xl p-6 md:p-8 shadow-xl"
             >
               <h2 className="font-display font-[900] text-2xl text-[#1A1A1A] leading-tight text-center mb-2">
-                {quizQuestions[3].title}
+                {quizQuestions[4].title}
               </h2>
               <p className="text-gray-500 text-sm text-center mb-8 font-medium">
-                {quizQuestions[3].sub}
+                {quizQuestions[4].sub}
               </p>
               <div className="flex flex-col gap-3">
-                {quizQuestions[3].options.map((opt, idx) => (
+                {quizQuestions[4].options.map((opt, idx) => (
                   <button
                     key={idx}
                     onClick={nextStep}
@@ -438,8 +452,8 @@ export default function App() {
             </motion.div>
           )}
 
-          {/* Motivational Transition (Step 5) */}
-          {funnelStep === 5 && (
+          {/* Motivational Transition (Step 6) */}
+          {funnelStep === 6 && (
             <motion.div
               key="motivation"
               initial={{ y: 20, opacity: 0 }}
@@ -465,8 +479,8 @@ export default function App() {
             </motion.div>
           )}
 
-          {/* Questions 5-7 (Steps 6-8) */}
-          {funnelStep >= 6 && funnelStep <= 8 && (
+          {/* Questions 6-8 (Steps 7-9) */}
+          {funnelStep >= 7 && funnelStep <= 9 && (
             <motion.div
               key={`q${funnelStep}`}
               initial={{ y: 20, opacity: 0 }}
@@ -495,8 +509,8 @@ export default function App() {
             </motion.div>
           )}
 
-          {/* Loading Animation (Step 9) */}
-          {funnelStep === 9 && (
+          {/* Loading Animation (Step 10) */}
+          {funnelStep === 10 && (
             <motion.div
               key="loading"
               initial={{ opacity: 0 }}
@@ -537,8 +551,8 @@ export default function App() {
             </motion.div>
           )}
 
-          {/* Transition to Offer (Step 10) */}
-          {funnelStep === 10 && (
+          {/* Transition to Offer (Step 11) */}
+          {funnelStep === 11 && (
             <motion.div
               key="offer_transition"
               initial={{ y: 20, opacity: 0 }}
@@ -582,7 +596,7 @@ export default function App() {
               
               <div className="w-full max-w-[400px]">
                 <Button 
-                  onClick={() => setFunnelStep(11)}
+                  onClick={() => setFunnelStep(12)}
                   className="bg-primary-green text-white hover:bg-dark-green animate-pulse py-5 text-xl"
                   showIcon={false}
                 >
